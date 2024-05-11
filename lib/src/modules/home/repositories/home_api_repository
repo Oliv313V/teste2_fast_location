@@ -1,0 +1,22 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_fast_location_vaos1/src/modules/home/model/address_model.dart';
+
+class HomeApiRepository {
+  final Dio dio;
+
+  HomeApiRepository(this.dio);
+
+  Future<AddressModel?> getAddressFromCEP(String cep) async {
+    try {
+      final response = await dio.get('https://viacep.com.br/ws/$cep/json/');
+      if (response.statusCode == 200) {
+        return AddressModel.fromJson(jsonDecode(response.data));
+      } else {
+        throw Exception('Erro ao buscar endereço do CEP');
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+}
